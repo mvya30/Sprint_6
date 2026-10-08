@@ -17,7 +17,7 @@ class OrderPage(BasePage):
         if metro:
             self.fill(OrderPageLocators.METRO_INPUT, metro)
             self.click_element_with_wait(OrderPage.metro_option(metro))
-            #self.click_element_with_wait(OrderPageLocators.metro_option(metro))
+            
         self.fill(OrderPageLocators.PHONE_INPUT, phone)
         self.click_element_with_wait(OrderPageLocators.NEXT_BUTTON)
 
@@ -25,13 +25,17 @@ class OrderPage(BasePage):
     def fill_second_form(self, date, rental_period=None, color=None, comment=""):
         self.fill(OrderPageLocators.DATE_INPUT, date)
         self.find_element_with_wait(OrderPageLocators.DATE_INPUT).send_keys(Keys.ENTER)
+
         if rental_period:
             self.click_element_with_wait(OrderPageLocators.RENTAL_PERIOD)
-            self.click_element_with_wait(OrderPageLocators.RENTAL_OPTION)
+            option_locator = (By.XPATH, OrderPageLocators.RENTAL_OPTION_TEMPLATE[1].format(rental_period))
+            self.click_element_with_wait(option_locator)
+            
         if color == 'black':
             self.click_element_with_wait(OrderPageLocators.COLOR_BLACK)
         elif color == 'grey':
             self.click_element_with_wait(OrderPageLocators.COLOR_GREY)
+
         if comment:
             self.fill(OrderPageLocators.COMMENT_INPUT, comment)
 

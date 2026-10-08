@@ -8,10 +8,10 @@ ORDER_DATA = [
         "name": "Марина",
         "surname": "Ярцева",
         "address": "Москва, Красная, 145",
-        "metro": "Тверская",
+        "metro": "Царицыно",
         "phone": "+79184470134",
         "date": "15.10.2026",
-        "rental_period": "сутки",
+        "rental_period": "двое суток",
         "color": "black",
         "comment": "Позвонить за час",
     },
@@ -19,15 +19,15 @@ ORDER_DATA = [
         "name": "Анна",
         "surname": "Сидорова",
         "address": "Санкт-Петербург, Невский, 10",
-        "metro": "Невский проспект",
+        "metro": "Октябрьское поле",
         "phone": "+79990001122",
         "date": "08.10.2026",
-        "rental_period": "двое суток",
+        "rental_period": "семеро суток",
         "color": "grey",
         "comment": "Оставить у двери",
     },
 ]
-@allure.feature("Заказ самоката")
+@allure.description("Проверяем полный флоу заказа с двух точек входа и на двух наборах данных")
 class TestOrder:
 
     @pytest.mark.parametrize("entry_point", ["top", "bottom"])
@@ -63,3 +63,20 @@ class TestOrder:
 
         success_text = order.get_success_message()
         assert "Заказ оформлен" in success_text
+        
+    @allure.story("Редиректы по логотипам")
+    def test_scooter_logo_redirects_to_main(self, driver):
+        main = MainPage(driver)
+        main.open()
+        main.click_order_button_top()
+        MainPage(driver).click_scooter_logo()
+        assert "qa-scooter" in driver.current_url
+
+    def test_yandex_logo_opens_dzen(self, driver):
+        main = MainPage(driver)
+        main.open()
+        main.click_yandex_logo()
+        main.wait_for_url_contains(["dzen.ru", "yandex.ru"])
+
+        assert "dzen.ru" in driver.current_url or "yandex.ru" in driver.current_url
+        
