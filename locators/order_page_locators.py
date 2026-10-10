@@ -21,3 +21,8 @@ class OrderPageLocators:
     ORDER_BUTTON = (By.XPATH,  "//div[contains(@class,'Order_Buttons')]//button[text()='Заказать']")
     CONFIRM_BUTTON = (By.XPATH, "//button[normalize-space()='Да']")
     SUCCESS_MESSAGE = (By.XPATH, "//div[contains(@class,'Order_ModalHeader')]")
+
+#Локаторы кнопок "Заказать"
+    ORDER_BUTTON_TOP = (By.XPATH, "//button[text()='Заказать']")
+    ORDER_BUTTON_BOTTOM = (By.XPATH, "(//button[text()='Заказать'])[2]")
+    

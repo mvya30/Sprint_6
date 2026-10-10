@@ -1,5 +1,7 @@
+import allure
 from pages.base_page import BasePage
 from locators.order_page_locators import OrderPageLocators
+from locators.header_page_locators import HeaderPageLocators
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -9,7 +11,15 @@ class OrderPage(BasePage):
     def metro_option(metro):
         return (By.XPATH, f"//div[contains(@class,'Order_Text') and text()='{metro}']")
 
-#Заполнить первую форму заказа
+    @allure.step("Нажать на верхнюю кнопку «Заказать»")
+    def click_order_button_top(self):
+        self.click_element_with_wait(OrderPageLocators.ORDER_BUTTON_TOP)
+
+    @allure.step("Нажать на нижнюю кнопку «Заказать»")
+    def click_order_button_bottom(self):
+        self.click_element_with_wait(OrderPageLocators.ORDER_BUTTON_BOTTOM)
+
+    @allure.step("Заполнить первую форму заказа")
     def fill_first_form(self, name, surname, address, phone, metro=None):
         self.fill(OrderPageLocators.NAME_INPUT, name)
         self.fill(OrderPageLocators.SURNAME_INPUT, surname)
@@ -21,7 +31,7 @@ class OrderPage(BasePage):
         self.fill(OrderPageLocators.PHONE_INPUT, phone)
         self.click_element_with_wait(OrderPageLocators.NEXT_BUTTON)
 
-#Заполнить вторую форму заказа
+    @allure.step("Заполнить вторую форму заказа")
     def fill_second_form(self, date, rental_period=None, color=None, comment=""):
         self.fill(OrderPageLocators.DATE_INPUT, date)
         self.find_element_with_wait(OrderPageLocators.DATE_INPUT).send_keys(Keys.ENTER)
@@ -39,11 +49,19 @@ class OrderPage(BasePage):
         if comment:
             self.fill(OrderPageLocators.COMMENT_INPUT, comment)
 
-# Подтвердить заказ
+    @allure.step("Подтвердить оформление заказа")
     def confirm_order(self):
         self.click_element_with_wait(OrderPageLocators.ORDER_BUTTON)
         self.click_element_with_wait(OrderPageLocators.CONFIRM_BUTTON)
 
-#Получить текст сообщения об успешном заказе
+    @allure.step("Получить текст сообщения об успешном заказе")
     def get_success_message(self):
         return self.get_text(OrderPageLocators.SUCCESS_MESSAGE)
+
+    @allure.step("Закрыть баннер об использовании Cookie")
+    def close_cookie_banner(self):
+        try:
+            self.click_element_with_wait(HeaderPageLocators.COOKIE_ACCEPT_BUTTON)
+        except Exception:
+            pass
+        
